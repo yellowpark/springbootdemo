@@ -1,4 +1,4 @@
-package com.harvel.demo;
+package com.harvel.springbootdemo;
 
 import java.util.Arrays;
 
