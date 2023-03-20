@@ -17,12 +17,21 @@
 # ENTRYPOINT java -jar springbootdemo-0.0.1-SNAPSHOT.jar
 
 
+# this section works
+# FROM maven:3.8.5-openjdk-17-slim AS build
+# COPY src /home/app/src
+# COPY pom.xml /home/app
+# RUN mvn -f /home/app/pom.xml -Pnative clean package
+
+# FROM openjdk:17-oracle
+# COPY --from=build /home/app/target/springbootdemo-*.jar /usr/local/lib/springbootdemo.jar
+# ENTRYPOINT ["java", "-jar", "/usr/local/lib/springbootdemo.jar"]
 
 FROM maven:3.8.5-openjdk-17-slim AS build
 COPY src /home/app/src
 COPY pom.xml /home/app
 RUN mvn -f /home/app/pom.xml -Pnative clean package
 
-FROM openjdk:17-oracle
-COPY --from=build /home/app/target/springbootdemo-*.jar /usr/local/lib/springbootdemo.jar
-ENTRYPOINT ["java", "-jar", "/usr/local/lib/springbootdemo.jar"]
+FROM amazoncorretto:17
+COPY --from=build /home/app/target/springbootdemo-*.jar springbootdemo.jar
+ENTRYPOINT ["java", "-jar", "springbootdemo.jar"]
